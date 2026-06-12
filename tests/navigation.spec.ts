@@ -54,9 +54,33 @@ test("Check left menu options", async ({page})=>{
     console.log(firstMenuItem)
     
     page.pause();
+})
+
+test("Navigate through the left panel", async ({page})=>{
+     const leftMenuItems = page.getByLabel('Sidepanel').getByRole('listitem')
+     const currentMenuItemsCount = await leftMenuItems.count();
+     console.log(currentMenuItemsCount)
+
+     for (let i=0; i<currentMenuItemsCount; i++){
+        const menuItem = leftMenuItems.nth(i);
+        const menuText = await menuItem.innerText();
+        console.log("Current menu item:", menuText);
+        
+        // Click on each menu ietm expected in 
+        //if(menuText !== 'Maintenance') {
+         //  await menuItem.click()
+       //  }
+
+         if(menuText === 'Maintenance'){
+            
+           await page.goBack()
+           await leftMenuItems.nth(10).click()
+           }
+         
+         else {
+             await menuItem.click()
+         }
+        
+     }
 
 })
-/*
-1. textContent() es un metodo que saca el texto que  esta en el DOM independientemente si esta visible o no pra  el usuario
-2. InnerText() es el metodo recomendado en playwright para sacar text es innerText, es cerca  ala realidad
-*/
