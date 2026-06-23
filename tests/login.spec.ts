@@ -21,7 +21,10 @@ test("Invalid login to hrm", async ({page}) => {
     await page.getByRole('textbox', {name:'Password'}).fill('abc')
     await page.getByRole('button',{name: 'Login'}).click()
 
-    const invalidMessage = await page.locator('p.oxd-alert-content-text').innerText()
+    //all locators work
+    //const invalidMessage = await page.locator('p.oxd-alert-content-text').innerText()
+    //const invalidMessage= await page.locator("//div[@role='alert']/div/p").innerText();   
+    const invalidMessage = await page.getByRole("alert").getByRole("paragraph").innerText()
     expect (invalidMessage).toEqual('Invalid credentials')
     console.log(invalidMessage)
 })
