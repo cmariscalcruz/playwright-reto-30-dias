@@ -63,34 +63,31 @@ test("Get Employ from table", async ({page}) => {
     await page.getByRole('textbox', {name:'Username'}).fill('Admin');
     await page.getByRole('textbox', {name:'Password'}).fill('admin123');
     await page.getByRole('button',{name: 'Login'}).click()
+    await expect(page.getByRole("link", {name:"Admin"})).toBeVisible()
 
     // Navigate to Admin > User Management > User
     await page.getByRole("link",{name: 'Admin'}).click()
     await page.getByRole("navigation", {name:'Topbar Menu'}).getByText("User Management").click()
     await page.getByRole ("menuitem", {name:'Users'}).click()
 
-    // Get rows  from table
-     //const  rows = page.getByRole("table").getByRole("row");
-
-
-    // declara una cosntante con en user especifico
-    const userForEdit = "Admin"
    
-    const pencilEdit  = 
-    page.getByRole("table").getByRole("row") // filtra todos los rows de la table
-    .filter({hasText: userForEdit})  // filtra el row con un user especifico
-    .locator("button") // identifica los butones de action
-    .filter({has: page.locator("i.bi-pencil-fill")}) // identifica el Edit button   
-    .click()  // Hace la action click
+    const userForEdition = "Admin"
+    // get specifi user to edit
+    const pencilEdit= page.getByRole("table").getByRole("row").nth(1)
+    //.filter({hasText: userForEdit})
+    .locator('//button//i[@class="oxd-icon bi-pencil-fill"]')
+    //.locator('button')
+    //.filter({has: page.locator("i.oxd-icon bi-pencil-fill")}) // identifica el Edit button  
+    await pencilEdit.click() 
+ 
+    //check the edited user  
+    //Forma 1
+    /* const currentUserName = await page.locator("//label[contains(.,'Username')]/parent::div/following-sibling::div/input").inputValue();
+     expect(currentUserName).toEqual(userForEdition) */
 
-    // desde Edited page
-    const currentUserName = 
-    await page.locator("label[contains(.,'Username')]/parent::div/following-sibling::div/input") // identidica el User texto box usando xpath
-    .inputValue() // esta value  se saca de Accecibility  ya que ene l DOM no se muestra el valor
-
-    // aqui se hace la asercion
-    expect(currentUserName).toEqual(userForEdit);
-
-    // otra forma de hacer usando 'toHaveValue()' que es la recomendada en Playwright
-    expect(page.locator("label[contains(.,'Username')]/parent::div/following-sibling::div/input")).toHaveValue(currentUserName)
+    //forma2 , la mas recomedada
+    expect(page.locator("//label[contains(.,'Username')]/parent::div/following-sibling::div/input")).toHaveValue(userForEdition)
  })
+
+
+ 
