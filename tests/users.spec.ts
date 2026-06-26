@@ -89,5 +89,64 @@ test("Get Employ from table", async ({page}) => {
     expect(page.locator("//label[contains(.,'Username')]/parent::div/following-sibling::div/input")).toHaveValue(userForEdition)
  })
 
+ test("Select a random user to edit except Admin",async({page}) =>{
+    //Login Page
+    await page.goto ('https://opensource-demo.orangehrmlive.com')
 
+    await page.getByRole('textbox', {name:'Username'}).fill('Admin');
+    await page.getByRole('textbox', {name:'Password'}).fill('admin123');
+    await page.getByRole('button',{name: 'Login'}).click()
+    await expect(page.getByRole("link", {name:"Admin"})).toBeVisible()
+
+    // Navigate to Admin > User Management > User
+    await page.getByRole("link",{name: 'Admin'}).click()
+    await page.getByRole("navigation", {name:'Topbar Menu'}).getByText("User Management").click()
+    await page.getByRole ("menuitem", {name:'Users'}).click()
+
+    //from Table
+   
+     const rows = page.getByRole("table").getByRole("row")
+     const countRows = await rows.count()
+     console.log(countRows)
+ })
+
+ test("random number", async ({page}) =>{
+    const randomNumber = Math.floor(Math.random() * 4);
+console.log(`Random Number: ${randomNumber}`);
+ })
+
+ 
+ test("Select a random user to edit except Admin",async({page}) =>{
+    //Login Page
+    await page.goto ('https://opensource-demo.orangehrmlive.com')
+
+    await page.getByRole('textbox', {name:'Username'}).fill('Admin');
+    await page.getByRole('textbox', {name:'Password'}).fill('admin123');
+    await page.getByRole('button',{name: 'Login'}).click()
+    await expect(page.getByRole("link", {name:"Admin"})).toBeVisible()
+
+    // Navigate to Admin > User Management > User
+    await page.getByRole("link",{name: 'Admin'}).click()
+    await page.getByRole("navigation", {name:'Topbar Menu'}).getByText("User Management").click()
+    await page.getByRole ("menuitem", {name:'Users'}).click()
+
+    //from Table
+     const rows = page.getByRole("table").getByRole("row")
+     const countRows = await rows.count()
+     const randomRow = Math.floor(Math.random()* (countRows))
+     
+
+    // const userToEdit = await rows.nth(randomUser).getByRole('cell').nth(1).innerText()
+    const randonRow = rows.nth(randomRow)
+    const userToEdition = await randonRow.getByRole('cell').nth(1).innerText();
+     console.log(userToEdition)
+
+
+    if (userToEdition !== 'Admin'){
+        const editButton = randonRow.locator('//button//i[@class="oxd-icon bi-pencil-fill"]')
+        await editButton.click()
+        expect(page.locator("//label[contains(.,'Username')]/parent::div/following-sibling::div/input")).toHaveValue(userToEdition)
+    }
+    
+ })
  
