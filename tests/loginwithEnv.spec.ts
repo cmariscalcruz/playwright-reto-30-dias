@@ -12,4 +12,8 @@ test("Login with user different to ADMIN", async ({page}) => {
     const pageLogin = new LoginPage(page)
     await pageLogin.loginASCM()
 
+    await expect(page.getByRole("navigation", {name: "Sidepanel"}).getByRole("link", {name:"Admin"})).toBeHidden()
+
+
+
 })

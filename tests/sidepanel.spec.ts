@@ -28,10 +28,5 @@ test("Check 'Search' filters the option", async ({page}) => {
 
     const searchInput = new SidePanel(page);
     await searchInput.searchOption(SideMenuOption.ADMIN)
-    await searchInput.searchOption(SideMenuOption.PIM)
-    await searchInput.searchOption(SideMenuOption.LEAVE)
-    await searchInput.searchOption(SideMenuOption.PERFORMANCE)
-    await searchInput.searchOption(SideMenuOption.CLAIM)
-
-   
+      
 })

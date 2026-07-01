@@ -20,6 +20,7 @@ export class SidePanel {
     async searchOption (option : SideMenuOption){
         await this.searchtextbox.fill(option)
         expect(this.searchtextbox).toHaveValue(option)
+        
         console.log(option)
         //expect(page.locator("//label[contains(.,'Username')]/parent::div/following-sibling::div/input")).toHaveValue(userToEdition)
     }
