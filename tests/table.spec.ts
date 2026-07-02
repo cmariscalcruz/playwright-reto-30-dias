@@ -1,4 +1,7 @@
 import {test, expect} from "@playwright/test"
+import { LoginPage } from "../PageObjects/LoginPage"
+import { SideMenuOption, SidePanel } from "../components/SidePanel";
+import { TopBarMenu } from "../Config/top-bar-menu/topbarmenu";
 
 
 test.beforeEach( "Login to OrangeHRM page", async ({page}) =>{
@@ -47,3 +50,22 @@ test("Get users from table", async({page})=>{
     const lista = await rows.allTextContents()
      console.log(lista)
 })
+
+ test ("Check Admin is filter into table", async ({page}) => {
+        await page.getByRole("link",{name: 'Admin'}).click()
+        await page.getByRole("navigation", {name:'Topbar Menu'}).getByText("User Management").click()
+        await page.getByRole ("menuitem", {name:'Users'}).click()
+
+        //Get the Admin users rows from table before filter 
+        const allRows = page.getByRole('table').getByRole('row')
+        const countRowsd = await allRows.count()
+        console.log (countRowsd)
+
+        const rowsTable = await page.locator("//div[@role='table']/div[@role='rowgroup']").count()
+        console.log("number of rows" , rowsTable)
+
+        const  table = page.getByRole('table').getByRole('rowgroup')
+        const as= await table.count()
+        console.log("number of " , as)
+
+    })

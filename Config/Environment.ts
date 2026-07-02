@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv';
 
 export class Environment {
     static readonly ADMIN_USERNAME = Environment.getRequired('ADMIN_USERNAME')
@@ -10,7 +11,7 @@ export class Environment {
         const value =  process.env[key] 
 
         if(!value){
-            throw  new Error ('Environment variable ' + key +  ' does not exits')
+            throw  new Error ('Environment variable ' + key +  ' does not exit')
         }
 
         return value
