@@ -3,6 +3,7 @@ import { LoginPage } from "../PageObjects/LoginPage"
 import { SideMenuOption, SidePanel } from "../components/SidePanel";
 import { TopBarMenu } from "../Config/top-bar-menu/topbarmenu";
 import { log } from "node:console";
+import { AddNewUserPage } from "../PageObjects/addnewuserpage";
 
 test("Get all username from table", async ({page}) => {
     // Login using LoginObjects
@@ -226,7 +227,7 @@ test("Get Employ from table", async ({page}) => {
 
 })
 
-test("Add a new User", async ({page})=>{
+test("Long Form: Add a new User", async ({page})=>{
     const userName = 'cris' + crypto.randomUUID()
     const employeeToSerach= 'Qwerty LName';
     const password = 'Or4cul0#963';
@@ -284,6 +285,29 @@ test("Add a new User", async ({page})=>{
 
     // Check added popup confirm is dipslayed
      await expect (page.locator('p.oxd-text--toast-message')).toHaveText('Successfully Saved')
+})
+test("Using POM: Add a new User", async ({page})=>{
+    const userName = 'cris' + crypto.randomUUID()
+    const employeeToSerach= 'Qwerty LName';
+    const password = 'Or4cul0#963';
 
+    //Login & Naviagte to Admin > User Management> Users
+    const loginPage= new LoginPage(page)
+    await loginPage.loginAsAdmin();
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+    const topbarMenu = new TopBarMenu(page)
+    await topbarMenu.userManagement.clickOnUsers()
 
+    // add New user
+    const addnewUser = new AddNewUserPage (page)
+    await addnewUser.clickAddButton();
+    await addnewUser.selectUserRole('ESS');
+    await addnewUser.employeeNameFill(employeeToSerach)
+    await addnewUser.selectStatus('Enabled')
+    await addnewUser.enterUserName(userName)
+    await addnewUser.enterPassword(password)
+    await addnewUser.enterConfirmationPassword(password)
+    await addnewUser.clickOnSaveButton()
+    await addnewUser.confirmationMessage()
 })
