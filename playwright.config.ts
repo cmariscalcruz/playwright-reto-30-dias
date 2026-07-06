@@ -42,7 +42,7 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-
+/*
     {
       name: 'admin-setup',
       testMatch: /admin\.setup\.ts/,
@@ -54,7 +54,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         storageState: '.auth/admin.json'
       }
-    },
+    },*/
   {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
