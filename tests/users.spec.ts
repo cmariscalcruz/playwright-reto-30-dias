@@ -4,6 +4,7 @@ import { SideMenuOption, SidePanel } from "../components/SidePanel";
 import { TopBarMenu } from "../Config/top-bar-menu/topbarmenu";
 import { log } from "node:console";
 import { AddNewUserPage } from "../PageObjects/addnewuserpage";
+import { UserModel } from "../Model/UserModel";
 
 test("Get all username from table", async ({page}) => {
     // Login using LoginObjects
@@ -288,7 +289,8 @@ test("Long Form: Add a new User", async ({page})=>{
 })
 test("Using POM: Add a new User", async ({page})=>{
     const userName = 'cris' + crypto.randomUUID()
-    const employeeToSerach= 'Qwerty LName';
+    //const employeeToSerach= 'Qwerty LName';
+    const employeeToSerach= 'bubu grey';
     const password = 'Or4cul0#963';
 
     //Login & Naviagte to Admin > User Management> Users
@@ -310,4 +312,35 @@ test("Using POM: Add a new User", async ({page})=>{
     await addnewUser.enterConfirmationPassword(password)
     await addnewUser.clickOnSaveButton()
     await addnewUser.confirmationMessage()
+})
+
+test("Using Interface: Add a new User", async ({page})=>{
+      const randomUserName = 'cris' + crypto.randomUUID()
+    const employeeToSerach= 'bubu grey';
+    const password = 'Or4cul0#963';
+
+    //Login & Naviagte to Admin > User Management> Users
+    const loginPage= new LoginPage(page)
+    await loginPage.loginAsAdmin();
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+    const topbarMenu = new TopBarMenu(page)
+    await topbarMenu.userManagement.clickOnUsers()
+
+    const userToAdd: UserModel ={
+        username: randomUserName,
+        employee: employeeToSerach,
+        status : 'Enabled',
+        role: 'ESS',
+        password:password,
+        confirmpassword: password
+
+
+    }
+
+    // add a new user
+    const addNewUser = new AddNewUserPage(page)
+    await addNewUser.addNewUser(userToAdd)
+    await addNewUser.confirmationMessage()
+
 })

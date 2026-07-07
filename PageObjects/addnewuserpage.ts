@@ -1,4 +1,5 @@
 import {Locator, Page, expect} from "@playwright/test"
+import { UserModel } from "../Model/UserModel";
 
 export class AddNewUserPage {
     private readonly page: Page;
@@ -56,7 +57,7 @@ export class AddNewUserPage {
 
     async employeeNameFill(employeename :string){
        await this.employeeNameInput.fill(employeename)
-       await this.page.getByText('Qwerty Qwerty LName', {exact: true}).click();
+       await this.page.getByText('bubu grey', {exact: true}).click();
     }
 
     async selectStatus(status:string){
@@ -75,4 +76,17 @@ export class AddNewUserPage {
     async enterConfirmationPassword(confirmationpassword: string){
        await this.confirmPasswordInput.fill(confirmationpassword)
     }
+
+    async addNewUser (user: UserModel){
+    await this.clickAddButton()
+    await this.selectUserRole(user.role);
+    await this.employeeNameFill(user.employee)
+    await this.selectStatus(user.status)
+    await this.enterUserName(user.username)
+    await this.enterPassword(user.password)
+    await this.enterConfirmationPassword(user.confirmpassword)
+    await this.clickOnSaveButton()
+   }
+
+   
 }
