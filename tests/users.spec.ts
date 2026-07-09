@@ -4,7 +4,8 @@ import { SideMenuOption, SidePanel } from "../components/SidePanel";
 import { TopBarMenu } from "../Config/top-bar-menu/topbarmenu";
 import { log } from "node:console";
 import { AddNewUserPage } from "../PageObjects/addnewuserpage";
-import { UserModel } from "../Model/UserModel";
+import { UserModel } from "../models/UserModel";
+import { UserFactory } from "../factory/Userfactory";
 
 test("Get all username from table", async ({page}) => {
     // Login using LoginObjects
@@ -316,7 +317,7 @@ test("Using POM: Add a new User", async ({page})=>{
 
 test("Using Interface: Add a new User", async ({page})=>{
       const randomUserName = 'cris' + crypto.randomUUID()
-    const employeeToSerach= 'bubu grey';
+    const employeeToSerach= 'Qwerty LName';
     const password = 'Or4cul0#963';
 
     //Login & Naviagte to Admin > User Management> Users
@@ -344,3 +345,65 @@ test("Using Interface: Add a new User", async ({page})=>{
     await addNewUser.confirmationMessage()
 
 })
+ test('Using Interface: Check invalid password displayed if tryng to add a new User', async ({page}) =>{
+    const randomUserName = 'cris' + crypto.randomUUID()
+    const employeeToSerach= 'Qwerty LName';
+    const password = 'Or4cul0#963';
+    const confirmationPassword = 'Or4cul0#9630';
+
+    //Login & Naviagte to Admin > User Management> Users
+    const loginPage= new LoginPage(page)
+    await loginPage.loginAsAdmin();
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+    const topbarMenu = new TopBarMenu(page)
+    await topbarMenu.userManagement.clickOnUsers()
+
+    const userToAdd: UserModel ={
+        username: randomUserName,
+        employee: employeeToSerach,
+        status : 'Enabled',
+        role: 'ESS',
+        password:password,
+        confirmpassword: confirmationPassword,
+
+
+    }
+
+    // add a new user
+    const addNewUser = new AddNewUserPage(page)
+    await addNewUser.invalidPassword(userToAdd)
+    
+ });
+
+ test("Using UserFactory: Add a new User", async ({page})=>{
+    const randomUserName = 'cris' + crypto.randomUUID().slice(0, 30) // hace que devuelva de la posicion 0 a 30
+    const employeeToSerach= 'Qwerty LName';
+    const password = 'Or4cul0#963';
+    const confirmationPassword = 'Or4cul0#9630';
+
+    //Login & Naviagte to Admin > User Management> Users
+    const loginPage= new LoginPage(page)
+    await loginPage.loginAsAdmin();
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+    const topbarMenu = new TopBarMenu(page)
+    await topbarMenu.userManagement.clickOnUsers()
+
+    /*// crea un admin user
+    const adminUser = UserFactory.createAdmin({
+        employee: 'Qwerty Qwerty LName',
+    })*/
+
+        const employeeUser = UserFactory.createEmployeeESS({
+            username:'cristina',
+            employee: 'Qwerty Qwerty LName',
+            password: 'Password1!',
+            confirmpassword: 'Password1!',
+        })
+
+    // add a new user
+    const addNewUser = new AddNewUserPage(page)
+    await addNewUser.addNewUser(employeeUser)
+    await addNewUser.confirmationMessage()
+ })

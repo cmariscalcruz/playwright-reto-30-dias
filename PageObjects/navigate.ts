@@ -9,6 +9,6 @@ export class Navigate {
     }
 
     async toDasboard (){
-        await this.page.goto('')
+        await this.page.goto('web/index.php/auth/login');
     }
 }
